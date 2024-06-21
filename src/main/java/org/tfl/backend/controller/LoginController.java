@@ -1,84 +1,71 @@
-package org.tfl.backend;
+package org.tfl.backend.controller;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
+import org.tfl.backend.dao.LoginDAO;
+
 
 import java.io.IOException;
-import java.io.Serial;
 import java.util.logging.Logger;
 
+@Controller
+@RequestMapping("/login")
+public class LoginController {
 
-/**
- * Servlet implementation class LoginServlet
- */
-@WebServlet("/login")
-public class LoginControllerServlet extends HttpServlet {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private static final Logger log = Logger.getLogger(LoginControllerServlet.class.getName());
+    private static final Logger log = Logger.getLogger(LoginController.class.getName());
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public LoginControllerServlet() {
-        super();
+    @GetMapping
+    public String loginPage() {
+        return "index";
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-     * response)
-     */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    @PostMapping
+    public ModelAndView handleLoginPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
         response.setHeader("Cache-Control", "no-store");
 
         HttpSession session = request.getSession(false);
-        if (session == null) {// no existing session
-
-            //TODO Redirect to index.jsp
-
+        if (session == null) {
+            return new ModelAndView(new RedirectView("login"));
         }
-
 
         String userid = request.getParameter("userid");
         String password = request.getParameter("password");
 
         if (userid == null || password == null) {
-
-            //TODO Redirect to index.jsp
-
+            return new ModelAndView(new RedirectView("login"));
         }
 
         if (LoginDAO.isAccountLocked(userid, request.getRemoteAddr())) {
             log.warning("Error: Account is locked " + userid + " " + request.getRemoteAddr());
-            response.sendRedirect("/src/main/webapp/index.jsp");
-
+            return new ModelAndView(new RedirectView("login"));
         } else if (LoginDAO.validateUser(userid, password, request.getRemoteAddr())) {
             password = null;
-            //Prevent Session fixation, invalidate and assign a new session
 
+            // Prevent Session fixation, invalidate and assign a new session
             session.invalidate();
             session = request.getSession(true);
             session.setAttribute("userid2fa", userid);
-            //Set the session id cookie with HttpOnly, secure and samesite flags
+
+            // Set the session id cookie with HttpOnly, secure, and same site flags
             String custsession = "JSESSIONID=" + session.getId() + ";Path=/;Secure;HttpOnly;SameSite=Strict";
             response.setHeader("Set-Cookie", custsession);
 
-            //Dispatch request to otp.jsp
-
+            return new ModelAndView("forward:/otp");
         } else {
             log.warning("Error: Username or password is invalid " + userid + " " + request.getRemoteAddr());
             String remoteip = request.getRemoteAddr();
             LoginDAO.incrementFailLogin(userid, remoteip);
-            response.sendRedirect("index.jsp");
+            return new ModelAndView(new RedirectView("login"));
         }
-
     }
-
 }

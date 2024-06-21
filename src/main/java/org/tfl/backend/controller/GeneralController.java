@@ -2,11 +2,12 @@ package org.tfl.backend.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/")
-public class HomeController {
+public class GeneralController {
     @GetMapping
     public String homePage() {
         return "index";
@@ -25,5 +26,10 @@ public class HomeController {
     @GetMapping("/logout")
     public String logoutPage() {
         return "logout";
+    }
+
+    @RequestMapping("/otp")
+    public String handeOtpPage() {
+        return "otp";
     }
 }
