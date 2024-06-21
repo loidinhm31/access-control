@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%@page import="org.tfl.backend.UserDAO" %>
+<%@page import="org.tfl.backend.dao.UserDAO" %>
 <%@page import="org.tfl.backend.AuthSession" %>
 <%@page import="org.tfl.backend.HtmlEscape" %>
 

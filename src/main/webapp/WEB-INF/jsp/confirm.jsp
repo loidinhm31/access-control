@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@page import="org.tfl.backend.AuthSession" %>
-<%@page import="org.tfl.backend.OTPDAO" %>
+<%@page import="org.tfl.backend.dao.OTPDAO" %>
 
 <%
     response.setHeader("Cache-Control", "no-store");

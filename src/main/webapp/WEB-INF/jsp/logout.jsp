@@ -1,8 +1,8 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@page import="java.util.logging.Logger" %>
 
-<%! private static final Logger log = Logger.getLogger("src/main/webapp/logout.jsp"); %>
+<%! private static final Logger log = Logger.getLogger("webapp/logout.jsp"); %>
 
 <%
 
@@ -40,7 +40,7 @@
     </p>
 
     <p>
-        <a href="/">Login Again</a>
+        <a href="${pageContext.request.contextPath}/">Login Again</a>
     </p>
 
     <%@include file="../../templates/footer.html" %>
