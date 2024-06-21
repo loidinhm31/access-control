@@ -37,12 +37,10 @@
         </ul>
     </form>
 
-    <a href="./fill.jsp">Register</a>
-
 
 </div>
 
-<%@include file="templates/footer.html" %>
+<%@include file="../../templates/footer.html" %>
 
 </body>
 </html>
