@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
 import java.util.logging.Logger;
 import org.tfl.crypto.CryptoUtil;
 import org.tfl.util.DatabaseUtil;
@@ -49,9 +50,9 @@ public class RegisterDAO {
         }
 
         // Hash password with salt
-        byte[] saltBytes = java.util.Base64.getDecoder().decode(salt);
+        byte[] saltBytes = Base64.getDecoder().decode(salt);
         byte[] passwordHash = CryptoUtil.getPasswordKey(password.toCharArray(), saltBytes, CryptoUtil.PBE_ITERATION);
-        String passwordHex = CryptoUtil.byteArrayToHexString(passwordHash);
+        String passwordHex = passwordHash != null ? CryptoUtil.byteArrayToHexString(passwordHash) : null;
 
         String query = "INSERT INTO users (userid, firstname, lastname, salt, password, isLocked, faillogin, otpsecret, label) " +
                 "VALUES (?, ?, ?, ?, ?, 0, 0, ?, 1)";

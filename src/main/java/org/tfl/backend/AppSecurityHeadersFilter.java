@@ -12,22 +12,19 @@ import java.io.IOException;
  * Servlet Filter implementation class SecureHeadersFilter
  */
 @WebFilter("/*")
-public class AppSecurityHeadersFilter implements Filter
-{
+public class AppSecurityHeadersFilter implements Filter {
 
     /**
      * Default constructor.
      */
-    public AppSecurityHeadersFilter()
-    {
+    public AppSecurityHeadersFilter() {
 
     }
 
     /**
      * @see Filter#destroy()
      */
-    public void destroy()
-    {
+    public void destroy() {
 
     }
 
@@ -35,8 +32,7 @@ public class AppSecurityHeadersFilter implements Filter
      * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
      */
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException
-    {
+            throws IOException, ServletException {
 
         ResponseWrapper resp = new ResponseWrapper((HttpServletResponse) response);
         // pass the request along the filter chain
@@ -46,15 +42,12 @@ public class AppSecurityHeadersFilter implements Filter
     /**
      * @see Filter#init(FilterConfig)
      */
-    public void init(FilterConfig fConfig) throws ServletException
-    {
+    public void init(FilterConfig fConfig) throws ServletException {
 
     }
 
-    private class ResponseWrapper extends HttpServletResponseWrapper
-    {
-        public ResponseWrapper(HttpServletResponse response)
-        {
+    private class ResponseWrapper extends HttpServletResponseWrapper {
+        public ResponseWrapper(HttpServletResponse response) {
             super(response);
             /*
              * Set the security headers. Note these headers may be overwritten by the
