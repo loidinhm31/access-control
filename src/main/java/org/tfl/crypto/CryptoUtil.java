@@ -27,7 +27,7 @@ public class CryptoUtil {
     public static byte[] getPasswordKey(char[] pass, byte[] salt, int count) {
 
         PBEKeySpec pbekeyspec = new PBEKeySpec(pass, salt, count, CryptoUtil.PBE_KEYLENGTH);
-        SecretKey pbekey = null;
+        SecretKey pbekey;
         try {
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(CryptoUtil.PBE_KEYALGO);
             pbekey = keyFactory.generateSecret(pbekeyspec);

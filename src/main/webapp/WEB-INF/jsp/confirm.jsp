@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@page import="org.tfl.backend.AuthSession" %>
+<%@page import="org.tfl.backend.OTPDAO" %>
 
 <%
     response.setHeader("Cache-Control", "no-store");
@@ -9,6 +10,18 @@
         return;
     }
 
+    String userid2fa = (String) session.getAttribute("userid2fa");
+    String remoteip = request.getRemoteAddr();
+    String otpSecretBase32 = OTPDAO.getBase32OTPSecret(userid2fa, remoteip).toLowerCase();
+
+    // Split the Base32 string into groups of 4 characters
+    StringBuilder formattedOtpSecret = new StringBuilder();
+    for (int i = 0; i < otpSecretBase32.length(); i += 4) {
+        if (i > 0) {
+            formattedOtpSecret.append(" ");
+        }
+        formattedOtpSecret.append(otpSecretBase32, i, Math.min(i + 4, otpSecretBase32.length()));
+    }
 %>
 
 
@@ -28,10 +41,11 @@
         <h3>Device Confirmation</h3>
     </div>
 
-    <%-- TODO
-        Get OTPSecret by OTPDAO and display as Base32 Encode
-
-     --%>
+    <div class="form-content">
+        <!-- Get OTPSecret by OTPDAO and display as Base32 Encode -->
+        <p>Active key for Google Authenticator:</p>
+        <p><b><%= formattedOtpSecret.toString() %></b></p>
+    </div>
 
     <form method="POST" autocomplete="off" accept-charset="utf-8" action="${pageContext.request.contextPath}/otpctl">
         <ul class="form-ul">
@@ -50,9 +64,7 @@
                             session.removeAttribute("otperror");
                             out.println("Invalid OTP");
                         }
-
                     %>
-
 
                 </div>
                 <input type="text" required name="totp" size="25">
@@ -67,7 +79,6 @@
 </div>
 
 <%@include file="../../templates/footer.html" %>
-
 
 </body>
 </html>
