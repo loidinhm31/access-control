@@ -25,24 +25,23 @@ public class AuthSession {
      */
     public static boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (req == null || resp == null) {
-            //TODO Throw Exception
+            throw new ServletException("Request or Response object is null");
         }
 
+        HttpSession session = req.getSession(false);
 
-        HttpSession sess = req.getSession(false);
-
-        if (sess == null) {
-            //TODO Redirect index.jsp
+        if (session == null) {
+            resp.sendRedirect("/");
+            return false;
         }
 
-
-        if (sess.getAttribute("userid") == null) { // not authenticated
-            //TODO Redirect index.jsp
+        if (session.getAttribute("userid") == null) { // not authenticated
+            resp.sendRedirect("/");
+            return false;
         }
 
         return true;
     }
-
 
     /**
      * Check if 2fa userid attribute is set. If it is not, redirect to specified error url
@@ -57,21 +56,22 @@ public class AuthSession {
     public static boolean check2FASession(HttpServletRequest req, HttpServletResponse resp, String redirecturl)
             throws IOException, ServletException {
         if (req == null || resp == null || redirecturl == null) {
-            //TODO Throw Exception
+            throw new ServletException("Request, Response or Redirect URL is null");
         }
 
         HttpSession session = req.getSession(false);
 
         if (session == null) {
-            //TODO Redirect redirecturl
+            resp.sendRedirect(redirecturl);
+            return false;
         }
 
         String userid2fa = (String) session.getAttribute("userid2fa");
         if (userid2fa == null) {
-            //TODO Redirect redirecturl
+            resp.sendRedirect(redirecturl);
+            return false;
         }
 
         return true;
     }
 }
-

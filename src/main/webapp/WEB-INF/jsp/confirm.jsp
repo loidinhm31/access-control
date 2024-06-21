@@ -6,7 +6,7 @@
 <%
     response.setHeader("Cache-Control", "no-store");
 
-    if (!AuthSession.check2FASession(request, response, "index.jsp")) {
+    if (!AuthSession.check2FASession(request, response, "/")) {
         return;
     }
 
