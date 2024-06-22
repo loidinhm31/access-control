@@ -14,7 +14,7 @@
     String userid = (String) session.getAttribute("userid");
 
     if (userid == null) {
-        response.sendRedirect("/src/main/webapp/error.html");
+        response.sendRedirect("error.html");
         return;
     }
 
@@ -24,7 +24,7 @@
         session.removeAttribute("userid");
         session.setAttribute("userid2fa", userid);
         userid = null;
-        RequestDispatcher rd = request.getRequestDispatcher("src/main/webapp/otp.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher("/otp");
         rd.forward(request, response);
         return;
     } else {// Token present

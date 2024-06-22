@@ -1,58 +1,38 @@
-
 package org.tfl.backend;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-/**
- * Servlet Filter implementation class SecureHeadersFilter
- */
-@WebFilter("/*")
+@Component
 public class AppSecurityHeadersFilter implements Filter {
 
-    /**
-     * Default constructor.
-     */
-    public AppSecurityHeadersFilter() {
+    private static final Logger log = LoggerFactory.getLogger(AppSecurityHeadersFilter.class);
 
-    }
+    public AppSecurityHeadersFilter() {}
 
-    /**
-     * @see Filter#destroy()
-     */
-    public void destroy() {
+    @Override
+    public void destroy() {}
 
-    }
-
-    /**
-     * @see Filter#doFilter(ServletRequest, ServletResponse, FilterChain)
-     */
+    @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-
         ResponseWrapper resp = new ResponseWrapper((HttpServletResponse) response);
         // pass the request along the filter chain
         chain.doFilter(request, resp);
     }
 
-    /**
-     * @see Filter#init(FilterConfig)
-     */
-    public void init(FilterConfig fConfig) throws ServletException {
+    @Override
+    public void init(FilterConfig fConfig) {}
 
-    }
-
-    private class ResponseWrapper extends HttpServletResponseWrapper {
+    private static class ResponseWrapper extends HttpServletResponseWrapper {
         public ResponseWrapper(HttpServletResponse response) {
             super(response);
-            /*
-             * Set the security headers. Note these headers may be overwritten by the
-             * servlet/resource entity down the chain
-             */
             response.setHeader("Strict-Transport-Security", "max-age=31536000;includeSubDomains");
             response.setHeader("Content-Security-Policy", "default-src 'self';");
             response.setHeader("X-Frame-Options", "DENY");
@@ -62,5 +42,4 @@ public class AppSecurityHeadersFilter implements Filter {
             response.setHeader("Cache-Control", "no-store");
         }
     }
-
 }
