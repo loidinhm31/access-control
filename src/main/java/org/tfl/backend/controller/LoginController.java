@@ -35,19 +35,19 @@ public class LoginController {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return new ModelAndView(new RedirectView("login"));
+            return new ModelAndView(new RedirectView("/login"));
         }
 
         String userid = request.getParameter("userid");
         String password = request.getParameter("password");
 
         if (userid == null || password == null) {
-            return new ModelAndView(new RedirectView("login"));
+            return new ModelAndView(new RedirectView("/login"));
         }
 
         if (LoginDAO.isAccountLocked(userid, request.getRemoteAddr())) {
             log.warning("Error: Account is locked " + userid + " " + request.getRemoteAddr());
-            return new ModelAndView(new RedirectView("login"));
+            return new ModelAndView(new RedirectView("/login"));
         } else if (LoginDAO.validateUser(userid, password, request.getRemoteAddr())) {
             password = null;
 
@@ -65,7 +65,7 @@ public class LoginController {
             log.warning("Error: Username or password is invalid " + userid + " " + request.getRemoteAddr());
             String remoteip = request.getRemoteAddr();
             LoginDAO.incrementFailLogin(userid, remoteip);
-            return new ModelAndView(new RedirectView("login"));
+            return new ModelAndView(new RedirectView("/login"));
         }
     }
 }

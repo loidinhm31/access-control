@@ -32,7 +32,7 @@ public class RegisterController {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return new ModelAndView(new RedirectView("index.jsp"));
+            return new ModelAndView(new RedirectView("/"));
         }
 
         String firstName = request.getParameter("firstname");
@@ -42,19 +42,19 @@ public class RegisterController {
         String repassword = request.getParameter("repassword");
 
         if (firstName == null || lastName == null || userid == null || password == null || repassword == null) {
-            return new ModelAndView(new RedirectView("index"));
+            return new ModelAndView(new RedirectView("/"));
         }
 
         if (password.length() < AppConstants.MIN_LENGTH_PASS) {
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         if (!password.equals(repassword)) {
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         if (RegisterDAO.findUser(userid, request.getRemoteAddr())) {
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         } else {
             byte[] salt = CryptoUtil.generateRandomBytes(CryptoUtil.SALT_SIZE);
             String base64Salt = java.util.Base64.getEncoder().encodeToString(salt);
@@ -62,7 +62,7 @@ public class RegisterController {
 
             boolean isUserAdded = RegisterDAO.addUser(firstName, lastName, userid, password, base64Salt, otpSecret, request.getRemoteAddr());
             if (!isUserAdded) {
-                return new ModelAndView(new RedirectView("error.html"));
+                return new ModelAndView(new RedirectView("/error"));
             }
 
             password = null;

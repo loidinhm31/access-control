@@ -14,7 +14,7 @@
     String userid = (String) session.getAttribute("userid");
 
     if (userid == null) {
-        response.sendRedirect("error.html");
+        response.sendRedirect("/error");
         return;
     }
 

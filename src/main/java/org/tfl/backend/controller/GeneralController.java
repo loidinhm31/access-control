@@ -2,7 +2,6 @@ package org.tfl.backend.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -31,5 +30,15 @@ public class GeneralController {
     @RequestMapping("/otp")
     public String handeOtpPage() {
         return "otp";
+    }
+
+    @GetMapping("/error")
+    public String errorPage() {
+        return "error";
+    }
+
+    @RequestMapping("/locked")
+    public String lockPage() {
+        return "locked.jsp";
     }
 }

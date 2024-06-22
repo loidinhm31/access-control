@@ -42,7 +42,7 @@ public class OTPController {
 
         if (otpvalue == null) {
             session.invalidate();
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         String otpsecret;
@@ -51,13 +51,13 @@ public class OTPController {
         } catch (Exception e) {
             log.severe("Failed to retrieve OTP secret: " + e.getMessage());
             session.invalidate();
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         String otpresult = TimeBaseOTP.generateOTP(CryptoUtil.hexStringToByteArray(otpsecret));
         if (otpresult == null) {
             session.invalidate();
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         if (otpresult.equals(otpvalue)) {
@@ -74,7 +74,7 @@ public class OTPController {
                 OTPDAO.resetFailLogin(userid, request.getRemoteAddr());
             } catch (Exception e) {
                 log.severe("Failed to reset fail login count: " + e.getMessage());
-                return new ModelAndView(new RedirectView("error.html"));
+                return new ModelAndView(new RedirectView("/error"));
             }
             // Redirect success page
             return new ModelAndView(new RedirectView("success"));
@@ -88,7 +88,7 @@ public class OTPController {
 
                 if (OTPDAO.isAccountLocked(userid, remoteip)) {
                     session.invalidate();
-                    return new ModelAndView(new RedirectView("locked.html"));
+                    return new ModelAndView(new RedirectView("locked.jsp"));
                 } else {
                     session.setAttribute("userid2fa", userid);
                     session.setAttribute("otperror", "Invalid OTP");
@@ -97,7 +97,7 @@ public class OTPController {
             } catch (Exception e) {
                 log.severe("Failed to update fail login count or check account lock: " + e.getMessage());
                 session.invalidate();
-                return new ModelAndView(new RedirectView("error.html"));
+                return new ModelAndView(new RedirectView("/error"));
             }
         }
     }
@@ -122,7 +122,7 @@ public class OTPController {
 
         if (otpvalue == null) {
             session.invalidate();
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         String otpsecret;
@@ -131,13 +131,13 @@ public class OTPController {
         } catch (Exception e) {
             log.severe("Failed to retrieve OTP secret: " + e.getMessage());
             session.invalidate();
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         String otpresult = TimeBaseOTP.generateOTP(CryptoUtil.hexStringToByteArray(otpsecret));
         if (otpresult == null) {
             session.invalidate();
-            return new ModelAndView(new RedirectView("error.html"));
+            return new ModelAndView(new RedirectView("/error"));
         }
 
         if (otpresult.equals(otpvalue)) {
@@ -154,7 +154,7 @@ public class OTPController {
                 OTPDAO.resetFailLogin(userid, request.getRemoteAddr());
             } catch (Exception e) {
                 log.severe("Failed to reset fail login count: " + e.getMessage());
-                return new ModelAndView(new RedirectView("error.html"));
+                return new ModelAndView(new RedirectView("/error"));
             }
             // Redirect success page
             return new ModelAndView(new RedirectView("/success"));
@@ -168,7 +168,7 @@ public class OTPController {
 
                 if (OTPDAO.isAccountLocked(userid, remoteip)) {
                     session.invalidate();
-                    return new ModelAndView(new RedirectView("locked.html"));
+                    return new ModelAndView(new RedirectView("locked.jsp"));
                 } else {
                     session.setAttribute("userid2fa", userid);
                     session.setAttribute("otperror", "Invalid OTP");
@@ -177,7 +177,7 @@ public class OTPController {
             } catch (Exception e) {
                 log.severe("Failed to update fail login count or check account lock: " + e.getMessage());
                 session.invalidate();
-                return new ModelAndView(new RedirectView("error.html"));
+                return new ModelAndView(new RedirectView("/error"));
             }
         }
     }
