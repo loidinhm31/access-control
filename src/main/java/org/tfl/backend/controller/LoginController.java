@@ -28,7 +28,7 @@ public class LoginController {
     }
 
     @PostMapping
-    public ModelAndView handleLoginPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public ModelAndView handleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
         response.setHeader("Cache-Control", "no-store");

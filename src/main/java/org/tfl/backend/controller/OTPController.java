@@ -23,7 +23,7 @@ public class OTPController {
     private static final Logger log = Logger.getLogger(OTPController.class.getName());
 
     @PostMapping
-    public ModelAndView handleOtpPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ModelAndView handleOtp(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/plain;charset=UTF-8");
         response.setHeader("Cache-Control", "no-store");

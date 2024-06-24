@@ -64,7 +64,12 @@
     <p>
         <a href="${pageContext.request.contextPath}/logout">Logout</a>
     </p>
-
+    <p>
+        <a href="${pageContext.request.contextPath}/">View notices</a>
+    </p>
+    <p>
+        <a href="${pageContext.request.contextPath}/news/write-news">Write notices</a>
+    </p>
 
     <%@include file="../../templates/footer.html" %>
 
