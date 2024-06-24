@@ -30,4 +30,12 @@ public enum LabelEnum {
                 .findFirst()
                 .orElse(null);
     }
+
+
+    public static LabelEnum fromValue(int labelValue) {
+        return Arrays.stream(LabelEnum.values())
+                .filter((e) -> e.getLabelValue() == labelValue)
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -14,3 +14,12 @@ CREATE TABLE users
     otpsecret  VARCHAR(64) NOT NULL,
     label      TINYINT NOT NULL
 );
+
+CREATE TABLE news
+(
+    id         INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    userid     VARCHAR(64) NOT NULL,
+    content    TEXT,
+    date       TIMESTAMP NOT NULL,
+    label      TINYINT NOT NULL
+);

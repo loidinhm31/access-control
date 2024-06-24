@@ -39,4 +39,28 @@ public class SecurityLabelDAO {
         }
         return true;
     }
+
+    public static int getSecurityLabelLevel(String userid) throws ServletException {
+        if (userid == null) {
+            throw new ServletException("Invalid parameters");
+        }
+
+        int labelLevel = 0;
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            String query = "SELECT label FROM users WHERE userid = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, userid);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        labelLevel = rs.getInt("label");
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            log.severe("Error assign security label: " + e.getMessage());
+            throw new ServletException("Database error", e);
+        }
+        return labelLevel;
+    }
 }
