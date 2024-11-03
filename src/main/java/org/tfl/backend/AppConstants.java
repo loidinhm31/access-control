@@ -4,7 +4,7 @@ package org.tfl.backend;
 public class AppConstants {
 
     // Defines maximum fail logins before account is locked
-    public static final int MIN_LENGTH_PASS = 1;
+    public static final int MIN_LENGTH_PASS = 6;
 
     // Defines maximum fail logins before account is locked
     public static final int MAX_FAIL_LOGIN = 9999999;

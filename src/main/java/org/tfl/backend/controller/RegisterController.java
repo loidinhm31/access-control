@@ -24,6 +24,34 @@ public class RegisterController {
         return "register";
     }
 
+    private boolean isValidPassword(String password) {
+        if (password == null) {
+            return false;
+        }
+
+        // Check min length
+        if (password.length() < AppConstants.MIN_LENGTH_PASS) {
+            return false;
+        }
+
+        boolean hasLowerCase = false;
+        boolean hasUpperCase = false;
+
+        // Check lowercase and uppercase
+        for (char c : password.toCharArray()) {
+            if (Character.isLowerCase(c)) {
+                hasLowerCase = true;
+            } else if (Character.isUpperCase(c)) {
+                hasUpperCase = true;
+            }
+
+            if (hasLowerCase && hasUpperCase) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @PostMapping
     public ModelAndView register(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
@@ -45,7 +73,8 @@ public class RegisterController {
             return new ModelAndView(new RedirectView("/"));
         }
 
-        if (password.length() < AppConstants.MIN_LENGTH_PASS) {
+        // Check valid password
+        if (!isValidPassword(password)) {
             return new ModelAndView(new RedirectView("/error"));
         }
 
@@ -65,8 +94,6 @@ public class RegisterController {
                 return new ModelAndView(new RedirectView("/error"));
             }
 
-            password = null;
-            repassword = null;
             session.invalidate();
             session = request.getSession(true);
             session.setAttribute("userid2fa", userid);
