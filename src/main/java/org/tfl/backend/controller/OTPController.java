@@ -91,7 +91,7 @@ public class OTPController {
                     return new ModelAndView(new RedirectView("locked.jsp"));
                 } else {
                     session.setAttribute("userid2fa", userid);
-                    session.setAttribute("otperror", "Invalid OTP");
+                    session.setAttribute("otperror", "OTP is invalid.");
                     return new ModelAndView(new RedirectView("confirm"));
                 }
             } catch (Exception e) {
@@ -118,9 +118,9 @@ public class OTPController {
 
         // Remove the userid2fa attribute to prevent multiple submission attempts
         session.removeAttribute("userid2fa");
-        String otpvalue = request.getParameter("totp");
+        String otpValue = request.getParameter("totp");
 
-        if (otpvalue == null) {
+        if (otpValue == null) {
             session.invalidate();
             return new ModelAndView(new RedirectView("/error"));
         }
@@ -134,13 +134,13 @@ public class OTPController {
             return new ModelAndView(new RedirectView("/error"));
         }
 
-        String otpresult = TimeBaseOTP.generateOTP(CryptoUtil.hexStringToByteArray(otpsecret));
-        if (otpresult == null) {
+        String otpResult = TimeBaseOTP.generateOTP(CryptoUtil.hexStringToByteArray(otpsecret));
+        if (otpResult == null) {
             session.invalidate();
             return new ModelAndView(new RedirectView("/error"));
         }
 
-        if (otpresult.equals(otpvalue)) {
+        if (otpResult.equals(otpValue)) {
             session.invalidate();
             session = request.getSession(true);
             session.setAttribute("userid", userid);

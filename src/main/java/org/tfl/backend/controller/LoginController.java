@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import org.tfl.backend.dao.LoginDAO;
-
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -24,7 +22,7 @@ public class LoginController {
 
     @GetMapping
     public String loginPage() {
-        return "index";
+        return "login";
     }
 
     @PostMapping
@@ -35,19 +33,19 @@ public class LoginController {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return new ModelAndView(new RedirectView("/login"));
+            return new ModelAndView("login", "error", "Session expired. Please try again.");
         }
 
         String userid = request.getParameter("userid");
         String password = request.getParameter("password");
 
         if (userid == null || password == null) {
-            return new ModelAndView(new RedirectView("/login"));
+            return new ModelAndView("login", "error", "Username and password are required.");
         }
 
         if (LoginDAO.isAccountLocked(userid, request.getRemoteAddr())) {
             log.warning("Error: Account is locked " + userid + " " + request.getRemoteAddr());
-            return new ModelAndView(new RedirectView("/login"));
+            return new ModelAndView("login", "error", "Account is locked. Please try again later.");
         } else if (LoginDAO.validateUser(userid, password, request.getRemoteAddr())) {
             password = null;
 
@@ -65,7 +63,7 @@ public class LoginController {
             log.warning("Error: Username or password is invalid " + userid + " " + request.getRemoteAddr());
             String remoteip = request.getRemoteAddr();
             LoginDAO.incrementFailLogin(userid, remoteip);
-            return new ModelAndView(new RedirectView("/login"));
+            return new ModelAndView("login", "error", "Username or password is invalid.");
         }
     }
 }

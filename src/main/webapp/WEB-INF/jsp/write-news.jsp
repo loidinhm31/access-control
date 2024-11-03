@@ -1,5 +1,14 @@
+<%@ page import="org.tfl.backend.AuthSession" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<%
+    response.setHeader("Cache-Control", "no-store");
+    if (!AuthSession.validate(request, response)) {
+        return;
+    }
+%>
+
 <html>
 <head>
     <meta charset="UTF-8">
@@ -22,11 +31,11 @@
             <li>
                 <textarea name="message" rows="5" cols="30" required></textarea>
             </li>
-            <li>
+            <li class="info">
                 <b>Your level: ${userLevel}</b>
             </li>
             <li>
-                Message level
+                <b>Message level</b>
             </li>
             <li>
                 <select name="messageLevel">

@@ -48,27 +48,27 @@ public class AuthSession {
      *
      * @param req
      * @param resp
-     * @param redirecturl
+     * @param redirectUrl
      * @return true if 2fa userid attribute is properly set, false otherwise
      * @throws IOException
      * @throws ServletException
      */
-    public static boolean check2FASession(HttpServletRequest req, HttpServletResponse resp, String redirecturl)
+    public static boolean check2FASession(HttpServletRequest req, HttpServletResponse resp, String redirectUrl)
             throws IOException, ServletException {
-        if (req == null || resp == null || redirecturl == null) {
+        if (req == null || resp == null || redirectUrl == null) {
             throw new ServletException("Request, Response or Redirect URL is null");
         }
 
         HttpSession session = req.getSession(false);
 
         if (session == null) {
-            resp.sendRedirect(redirecturl);
+            resp.sendRedirect(redirectUrl);
             return false;
         }
 
         String userid2fa = (String) session.getAttribute("userid2fa");
         if (userid2fa == null) {
-            resp.sendRedirect(redirecturl);
+            resp.sendRedirect(redirectUrl);
             return false;
         }
 

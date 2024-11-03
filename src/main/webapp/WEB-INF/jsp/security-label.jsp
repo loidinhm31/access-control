@@ -1,5 +1,14 @@
+<%@ page import="org.tfl.backend.AuthSession" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
+
+<%
+    response.setHeader("Cache-Control", "no-store");
+    if (!AuthSession.validate(request, response)) {
+        return;
+    }
+%>
 
 <!DOCTYPE html>
 <html>
@@ -9,48 +18,46 @@
     <title>Assign Security Level</title>
 </head>
 <body>
-<h2>Assign security level</h2>
-<form action="${pageContext.request.contextPath}/security-label" method="POST">
-    <table>
-        <tr>
-            <td>Username:</td>
-            <td><input type="text" name="targetUserId" required></td>
-        </tr>
-        <tr>
-            <td>Level:</td>
-            <td>
-                <label>
-                    <select name="levelName">
-                        <option value="TOP_SECRET">Top Secret</option>
-                        <option value="SECRET">Secret</option>
-                        <option value="CONFIDENTIAL">Confidential</option>
-                        <option value="UNCLASSIFIED">Unclassified</option>
-                    </select>
-                </label>
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="submit" value="Apply"></td>
-        </tr>
-    </table>
-
-    <div class="settingmsg">
-        <%
-            String error = (String) request.getAttribute("error");
-            if (error != null) {
-                out.println(error);
-            }
-        %>
+<div class="webformdiv">
+    <div class="formheader">
+        <h2>Assign security level</h2>
     </div>
-    <div class="success">
-        <%
-            String message = (String) request.getAttribute("message");
-            if (message != null) {
-                out.println(message);
-            }
-        %>
-    </div>
-</form>
 
+    <form action="${pageContext.request.contextPath}/security-label" method="POST">
+        <ul class="form-ul">
+            <li>
+                <label>Username</label>
+                <input type="text" name="targetUserId" required>
+            </li>
+            <li>
+                <label>Level</label>
+                <select name="levelName">
+                    <option value="TOP_SECRET">Top Secret</option>
+                    <option value="SECRET">Secret</option>
+                    <option value="CONFIDENTIAL">Confidential</option>
+                    <option value="UNCLASSIFIED">Unclassified</option>
+                </select>
+            </li>
+
+            <li class="message">
+                <c:if test="${not empty error}">
+                    <div class="settingmsg">
+                            ${error}
+                    </div>
+                </c:if>
+
+                <c:if test="${not empty message}">
+                    <div class="success">
+                            ${message}
+                    </div>
+                </c:if>
+            </li>
+
+            <li>
+                <input type="submit" value="Apply">
+            </li>
+        </ul>
+    </form>
+</div>
 </body>
 </html>

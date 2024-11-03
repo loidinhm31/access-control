@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@page import="org.tfl.backend.dao.UserDAO" %>
@@ -23,7 +24,6 @@
     if (anticsrf == null) {// Token not present redirect back to OTP page for validation again
         session.removeAttribute("userid");
         session.setAttribute("userid2fa", userid);
-        userid = null;
         RequestDispatcher rd = request.getRequestDispatcher("/otp");
         rd.forward(request, response);
         return;
@@ -61,14 +61,21 @@
         <br>
     </p>
 
+    <c:if test="${userid == 'admin'}">
     <p>
-        <a href="${pageContext.request.contextPath}/logout">Logout</a>
+        <a href="${pageContext.request.contextPath}/security-label">Assign security labels</a>
     </p>
+    </c:if>
+
     <p>
         <a href="${pageContext.request.contextPath}/news">View notices</a>
     </p>
     <p>
         <a href="${pageContext.request.contextPath}/news/write-news">Write notices</a>
+    </p>
+
+    <p>
+        <a href="${pageContext.request.contextPath}/logout">Logout</a>
     </p>
 
     <%@include file="../../templates/footer.html" %>
