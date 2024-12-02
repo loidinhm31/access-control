@@ -47,8 +47,6 @@ public class LoginController {
             log.warning("Error: Account is locked " + userid + " " + request.getRemoteAddr());
             return new ModelAndView("login", "error", "Account is locked. Please try again later.");
         } else if (LoginDAO.validateUser(userid, password, request.getRemoteAddr())) {
-            password = null;
-
             // Prevent Session fixation, invalidate and assign a new session
             session.invalidate();
             session = request.getSession(true);

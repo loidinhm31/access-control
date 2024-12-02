@@ -159,14 +159,14 @@ public class OTPController {
             // Redirect success page
             return new ModelAndView(new RedirectView("/success"));
         } else { // Incorrect OTP value
-            String remoteip = request.getRemoteAddr();
-            log.warning("Error: Invalid otp value from " + remoteip + " for user " + userid);
+            String remoteIpAddr = request.getRemoteAddr();
+            log.warning("Error: Invalid otp value from " + remoteIpAddr + " for user " + userid);
 
             try {
                 // Update fail login count.
-                OTPDAO.updateFailLogin(userid, remoteip);
+                OTPDAO.updateFailLogin(userid, remoteIpAddr);
 
-                if (OTPDAO.isAccountLocked(userid, remoteip)) {
+                if (OTPDAO.isAccountLocked(userid, remoteIpAddr)) {
                     session.invalidate();
                     return new ModelAndView(new RedirectView("locked.jsp"));
                 } else {

@@ -1,4 +1,4 @@
-CREATE DATABASE controldb;
+CREATE DATABASE IF NOT EXISTS controldb;
 
 USE controldb;
 
