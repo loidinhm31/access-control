@@ -60,7 +60,7 @@ public class RegisterController {
 
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return new ModelAndView(new RedirectView("/"));
+            return new ModelAndView("error", "error", "Session expired. Please try again.");
         }
 
         String firstName = request.getParameter("firstname");
@@ -70,20 +70,22 @@ public class RegisterController {
         String repassword = request.getParameter("repassword");
 
         if (firstName == null || lastName == null || userid == null || password == null || repassword == null) {
-            return new ModelAndView(new RedirectView("/"));
+            return new ModelAndView("error", "error", "All fields are required.");
         }
 
         // Check valid password
         if (!isValidPassword(password)) {
-            return new ModelAndView(new RedirectView("/error"));
+            return new ModelAndView("error", "error",
+                    "Password must be at least " + AppConstants.MIN_LENGTH_PASS +
+                    " characters long and contain both uppercase and lowercase letters.");
         }
 
         if (!password.equals(repassword)) {
-            return new ModelAndView(new RedirectView("/error"));
+            return new ModelAndView("error", "error", "Passwords do not match.");
         }
 
         if (RegisterDAO.findUser(userid, request.getRemoteAddr())) {
-            return new ModelAndView(new RedirectView("/error"));
+            return new ModelAndView("error", "error", "Username already exists. Please choose a different username.");
         } else {
             byte[] salt = CryptoUtil.generateRandomBytes(CryptoUtil.SALT_SIZE);
             String base64Salt = java.util.Base64.getEncoder().encodeToString(salt);
@@ -91,7 +93,7 @@ public class RegisterController {
 
             boolean isUserAdded = RegisterDAO.addUser(firstName, lastName, userid, password, base64Salt, otpSecret, request.getRemoteAddr());
             if (!isUserAdded) {
-                return new ModelAndView(new RedirectView("/error"));
+                return new ModelAndView("error", "error", "Failed to create account. Please try again later.");
             }
 
             session.invalidate();

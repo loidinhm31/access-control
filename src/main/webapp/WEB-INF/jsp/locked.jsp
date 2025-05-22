@@ -15,7 +15,7 @@
 
     <footer class="bottom">
         <p>
-            Copyright &copy; 2020 All rights reserved.<br>
+            Copyright &copy; 2025 All rights reserved.<br>
         </p>
     </footer>
 </div>
